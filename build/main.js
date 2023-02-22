@@ -1,16 +1,13 @@
 "use strict";
-var __importDefault =
-    (this && this.__importDefault) ||
-    function (mod) {
-        return mod && mod.__esModule ? mod : { default: mod };
-    };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
 const path_1 = __importDefault(require("path"));
 const electron_store_1 = __importDefault(require("electron-store"));
 const store = new electron_store_1.default();
 let window;
-
 const save_cookies = () => {
     const cookies = electron_1.session.fromPartition("persist:webview").cookies;
     console.log(cookies);
@@ -19,26 +16,24 @@ const save_cookies = () => {
         store.set("cookies", cookies);
     });
 };
-
 const load_cookies = () => {
     const cookies = electron_1.session.fromPartition("persist:webview").cookies;
     if (store.get("cookies")) {
         const savedCookies = store.get("cookies");
         // check savedCookies is array
-        if (!Array.isArray(savedCookies)) return;
+        if (!Array.isArray(savedCookies))
+            return;
         for (const cookie of savedCookies) {
             cookie["url"] = "https://saint.ssu.ac.kr";
             cookies.set(cookie);
         }
     }
 };
-
 const delete_cookies_data = () => {
     if (store.get("cookies")) {
         store.delete("cookies");
     }
 };
-
 electron_1.app.on("ready", () => {
     window = new electron_1.BrowserWindow({
         width: 1225,
@@ -57,7 +52,6 @@ electron_1.app.on("ready", () => {
     electron_1.nativeTheme.themeSource = "light";
     load_cookies();
 });
-
 electron_1.app.whenReady().then(() => {
     electron_1.ipcMain.on("onSignOut", (evt) => {
         console.log("onSignOut");
@@ -67,7 +61,6 @@ electron_1.app.whenReady().then(() => {
         electron_1.app.relaunch();
     });
 });
-
 electron_1.app.on("before-quit", () => {
     save_cookies();
 });

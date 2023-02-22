@@ -17,7 +17,13 @@
         "asar": true,
         "mac": {
             "category": "public.app-category.social-networking",
-            "target": "dmg",
+            "target": {
+                "target": "dmg",
+                "arch": [
+                    "x64",
+                    "arm64"
+                ]
+            },
             "darkModeSupport": false,
             "electronLanguages": [
                 "ko"
