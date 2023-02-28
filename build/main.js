@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
 const path_1 = __importDefault(require("path"));
 const electron_store_1 = __importDefault(require("electron-store"));
+const axios_1 = __importDefault(require("axios"));
 const store = new electron_store_1.default();
 let window;
 const save_cookies = () => {
@@ -59,6 +60,24 @@ electron_1.app.whenReady().then(() => {
         delete_cookies_data();
         electron_1.app.quit();
         electron_1.app.relaunch();
+    });
+    axios_1.default.get("https://versionchecker.asheswook.workers.dev/check/uSAINT").then((res) => {
+        const latestVer = res.data.latestVersion.replace("v", "");
+        const currentVer = electron_1.app.getVersion();
+        if (latestVer !== currentVer) {
+            electron_1.dialog
+                .showMessageBox(window, {
+                type: "info",
+                title: "uSAINT",
+                message: `업데이트가 있습니다. 다운로드 페이지로 이동하시겠습니까? (${latestVer})`,
+                buttons: ["취소", "확인"],
+                defaultId: 1,
+            })
+                .then((res) => {
+                if (res.response == 1)
+                    electron_1.shell.openExternal("https://github.com/asheswook/uSAINT-macOS/releases/latest");
+            });
+        }
     });
 });
 electron_1.app.on("before-quit", () => {

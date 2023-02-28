@@ -1,7 +1,8 @@
-import { app, BrowserWindow, session, nativeTheme, ipcMain } from "electron";
+import { app, BrowserWindow, session, nativeTheme, ipcMain, dialog, shell } from "electron";
 import fs from "fs";
 import path from "path";
 import Store from "electron-store";
+import axios from "axios";
 
 const store = new Store();
 let window: BrowserWindow;
@@ -62,6 +63,25 @@ app.whenReady().then(() => {
         delete_cookies_data();
         app.quit();
         app.relaunch();
+    });
+
+    axios.get("https://versionchecker.asheswook.workers.dev/check/uSAINT").then((res) => {
+        const latestVer = res.data.latestVersion.replace("v", "");
+        const currentVer = app.getVersion();
+
+        if (latestVer !== currentVer) {
+            dialog
+                .showMessageBox(window, {
+                    type: "info",
+                    title: "uSAINT",
+                    message: `업데이트가 있습니다. 다운로드 페이지로 이동하시겠습니까? (${latestVer})`,
+                    buttons: ["취소", "확인"],
+                    defaultId: 1,
+                })
+                .then((res) => {
+                    if (res.response == 1) shell.openExternal("https://github.com/asheswook/uSAINT-macOS/releases/latest");
+                });
+        }
     });
 });
 
