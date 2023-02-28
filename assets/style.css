@@ -2,6 +2,9 @@
     padding: 0px;
     margin: 0px;
 }
+body {
+    background-color: #171923;
+}
 #contentWrapper {
     position: relative;
 }
@@ -16,7 +19,7 @@
     -webkit-app-region: drag;
     display: flex;
     height: 39px;
-    background-color: #fff;
+    background-color: #171923;
     color: #2d3748;
     display: flex;
     padding: 0 10px;
@@ -41,10 +44,11 @@ i:hover {
     float: left;
     width: 70px;
     height: 39px;
-    background-color: #fff;
+    background-color: #171923;
     z-index: 100;
 }
 #icons {
+    background: #171923;
     display: flex;
     float: left;
     height: 39px;

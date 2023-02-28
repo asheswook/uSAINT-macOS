@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
 const path_1 = __importDefault(require("path"));
 const electron_store_1 = __importDefault(require("electron-store"));
+const axios_1 = __importDefault(require("axios"));
 const store = new electron_store_1.default();
 let window;
 const save_cookies = () => {
@@ -59,6 +60,10 @@ electron_1.app.whenReady().then(() => {
         delete_cookies_data();
         electron_1.app.quit();
         electron_1.app.relaunch();
+    });
+    axios_1.default.get("https://versionchecker.asheswook.workers.dev/check/uSAINT").then((res) => {
+        console.log(res.data);
+        electron_1.dialog.showMessageBox({ type: "info", title: "uSAINT", message: res.data });
     });
 });
 electron_1.app.on("before-quit", () => {
